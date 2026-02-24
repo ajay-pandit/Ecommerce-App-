@@ -5,6 +5,7 @@ import com.app.ecom.entity.Product;
 import com.app.ecom.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface CartItemRepository extends JpaRepository<Cartitem,Long> {
@@ -12,4 +13,8 @@ public interface CartItemRepository extends JpaRepository<Cartitem,Long> {
     Cartitem findByUserAndProduct(User user, Product product);
 
     void deleteByUserAndProduct(Optional<User> user, Optional<Product> product);
+
+    List<Cartitem> getAllCartItemsByUser(Optional<User> user);
+
+    void deleteByUser(User user);
 }

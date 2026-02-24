@@ -12,6 +12,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -22,7 +24,6 @@ public class CartService {
     private final ProductRepository productRepository;
     private final UserRepository userRepository;
     public boolean addToCart(String userId, CartItemRequest requst) {
-       System.out.println("working 1");
         Optional<Product> productOpt = productRepository.findById(requst.getProductId());
         if(productOpt.isEmpty()){
             return false;
@@ -70,5 +71,23 @@ public class CartService {
             return true;
         }
         return false;
+    }
+
+    public List<Cartitem> getAllCartItems(String userId) {
+        System.out.println("working 1");
+        Optional<User> user = userRepository.findById(Long.valueOf(userId));
+        List<Cartitem> AllCartItems = new ArrayList<Cartitem>() ;
+        if(user.isPresent()){
+            AllCartItems=cartItemRepository.getAllCartItemsByUser(user);
+        }
+        return AllCartItems;
+
+
+    }
+
+    public void clearCart(String userId) {
+        userRepository.findById(Long.valueOf(userId)).ifPresent(user->
+                cartItemRepository.deleteByUser(user)
+        );
     }
 }
